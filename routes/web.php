@@ -26,7 +26,12 @@ $router->group(['namespace' => 'Agent'], function () use ($router) {
 	//query klt order status for ourspay
 	$router->post('klt/query', 'KltController@query');
 
+
+	$router->post('kltwy/notify', 'KltwyController@notify');
+	$router->post('kltwy/query', 'KltwyController@query');
+
 	//kltdf submit
+	$router->get('kltdf/callback', 'KltdfController@callback');
 	$router->post('kltdf/payment', 'KltdfController@payment');
 	$router->post('kltdf/query', 'KltdfController@query');
 	$router->post('kltdf/notify', 'KltdfController@notify');

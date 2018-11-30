@@ -2,25 +2,20 @@
 
 namespace App\Http\Controllers\Agent;
 
-use App\Http\Controllers\Controller;
-
-use Log;
-
 use App\Http\Lib\Functions;
 
-/**
- * 开联通快捷支付
- */
-class KltController extends Controller
-{
+use App\Http\Controllers\Controller;
 
-	private $ident = 'klt-quick';
+class KltwyController extends Controller 
+{
+	private $ident = 'klt-wy';
+
+	private $conf;
 
 	public function __construct()
 	{
-
+		$this->conf = config('agent.kltwy');
 	}
-
 
 	public function callback()
 	{
@@ -29,7 +24,7 @@ class KltController extends Controller
 
 	public function notify()
 	{
-		$url = env('OURSPAY_ADDRESS').config('agent.kltkj.notifyurl');
+		$url = Functions::fullPayUrl($this->conf['notifyurl']);
 		$content = Functions::curlForm($url, $_POST);
 		
 		Functions::agentNotifyLog($this->ident);	
@@ -38,11 +33,10 @@ class KltController extends Controller
 
 	public function query()
 	{
-		$url = config('agent.kltkj.query');
+		$url = $this->conf['query'];
 		$res = Functions::curlJson($url, file_get_contents("php://input"));
 		
 		Functions::agentNotifyLog($this->ident);
 		return $res;
 	}
-
 }
